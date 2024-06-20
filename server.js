@@ -7,7 +7,7 @@ const dotenv = require('dotenv').config(); // importing the ".env" file
 
 const secretKey = process.env.JWT_SECRET_KEY || 'defaultSecretKey-eohfufiufrei';
 const expiration = Number(process.env.JWT_EXPIRATION) || 3600 ;
-const PORT = process.env.PORT || 8086;
+const PORT = process.env.PORT || 8088;
 
 const app = express();
 
@@ -36,7 +36,7 @@ db.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-	res.send({ "message": "Welcome to the JWT Authentication API" });
+	res.send({ "message": "Welcome to the Dorms Review API" });
 });
 
 app.post("/register", (req, res) => {

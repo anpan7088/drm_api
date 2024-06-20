@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const authRoutes = require('./auth/routes'); // Import the auth routes module
 const userProfileRoutes = require('./userProfiles/routes'); // Import the user routes module
 
-const PORT = process.env.PORT || 8086;
+const PORT = process.env.PORT || 8088;
 
 const app = express();
 
