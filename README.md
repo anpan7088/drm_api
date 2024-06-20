@@ -1,5 +1,6 @@
 # drm_api
 
+<<<<<<< HEAD
 ## Dorms Review API
 
 To begin development download this repo as a .zip or:
@@ -74,5 +75,8 @@ server {
     return 404; # managed by Certbot
 }
 ```
+=======
+##Dorms Review API
+>>>>>>> 1ab9a08890d2fa3afccab82098d4f385f46af1a7
 
 
