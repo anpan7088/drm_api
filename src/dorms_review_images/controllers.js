@@ -40,4 +40,20 @@ const deleteReviewImage = async (req, res) => {
     }
 };
 
+const getReviewImages = async (req, res) => {
+    const { review_id } = req.params;
+    try{
+        const [result] = await pool.promise().query('SELECT * FROM dorm_review_images WHERE dorm_review_id =?', [review_id]);
+        const ret = {
+            baseUrl: process.env.IMAGES_BASE_URL,
+            data: result
+        }
+        res.json(ret);
+    }
+    catch(err){
+        // console.error(err);
+        res.status(500).json({ message: 'Error getting dorm images!' });
+    }
+};
+
 module.exports = { postReviewImage, deleteReviewImage, getReviewImages };
