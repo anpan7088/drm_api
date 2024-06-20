@@ -29,16 +29,19 @@ app.get("/", (req, res) => {
     res.send({ "message": "Welcome to Rate Dorms API!" });
 });
 
-// Serve static files from the 'uploads' directory
-// #mkd ova e samo za lokalen razvoj za deployment na server treba da se izmisle neshto so tamu so web serverot
-app.use('/public', express.static('public'));
-
-// Use the auth routes
-app.use("/auth", authRoutes);
 
 // Use user profile routes
 app.use("/user", userProfileRoutes);
 
+// Use the auth routes
+app.use("/auth", authRoutes);
+
+
+// Use dorms routes
+app.use("/dorms", require('./dorms/routes'));
+
+// Serve static files from the 'uploads' directory
+app.use('/public', express.static('public'));
 
 // port
 app.listen(PORT, () => {
