@@ -10,7 +10,7 @@ cd drm_api
 yarn 
 ```
 
-Weit instaling dependences to finish, yhen start autoreloading development server:
+Weit installing dependences to finish, then start auto reloading development server:
 
 ```bash
 nodemon src/app.js
@@ -33,7 +33,7 @@ pm2 save
 sudo reboot
 ```
 
-For remote acces api are published on https://dorms.sman.cloud/api whith [nginx](https://nginx.org/)
+For remote acces API are published on https://dorms.sman.cloud/api whith [nginx](https://nginx.org/)
 
 ```nginx
 server {
