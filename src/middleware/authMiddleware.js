@@ -20,15 +20,6 @@ const isUser = (req, res, next) => {
     });
 };
 
-const isAdmin = (req, res, next) => {
-    // console.log(req.role);
-    if (req.user && req.role=='admin' ) {
-        next();
-    } else {
-        res.status(403).json({ error: 'Forbidden: Admins only' });
-    }
-};
-
 const isOwner = async (req, res, next) => {
     const reviewToDel = req.params.id;
     // console.log(reviewToDel);
@@ -45,5 +36,15 @@ const isOwner = async (req, res, next) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+const isAdmin = (req, res, next) => {
+    // console.log(req.role);
+    if (req.user && req.role=='admin' ) {
+        next();
+    } else {
+        res.status(403).json({ error: 'Forbidden: Admins only' });
+    }
+};
+
 
 module.exports = { isUser, isAdmin, isOwner };
