@@ -6,14 +6,7 @@ const { createMulterMiddleware } = require('../middleware/uploadMiddleware');
 
 const router = express.Router();
 
-const storageConfig = { 
-    destination: process.env.IMAGES_FOLDER || 'public/images',
-    fieldName: 'revImg' 
-};
 
-// Route for photo upload (POST)
-// :id is dorm_id
-router.post('/:id', isUser, createMulterMiddleware(storageConfig), postReviewImage);
 
 // Route for photo deletion (DELETE)
 router.delete('/:imageId', isUser, isAdmin, deleteReviewImage );
