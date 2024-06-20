@@ -36,7 +36,7 @@ app.use('/public', express.static('public'));
 // Use the auth routes
 app.use("/auth", authRoutes);
 
-// Use user profile routes 
+// Use user profile routes
 app.use("/user", userProfileRoutes);
 
 

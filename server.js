@@ -1,5 +1,5 @@
 // server.js
-
+// this is main expres server file
 const express = require("express");
 const mysql2 = require("mysql2");
 const jwt = require('jsonwebtoken');
