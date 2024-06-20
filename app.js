@@ -39,21 +39,6 @@ app.use("/auth", authRoutes);
 // Use user profile routes
 app.use("/user", userProfileRoutes);
 
-// Use dorms routes
-app.use("/dorms", require('./dorms/routes'));
-
-// Use dorms images routes
-app.use("/dorm-img", require('./dorms_images/routes'))
-
-// Use dorms review images routes
-app.use("/review-img", require('./dorms_review_images/routes'))
-
-// Use dorms reviews routes
-app.use("/reviews", require('./dorms_review/routes'));
-
-// Use cities routes
-app.use("/cities", require('./cities/routes'));
-
 // port
 app.listen(PORT, () => {
     console.log("App is running on port " + PORT);
