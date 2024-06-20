@@ -16,7 +16,7 @@ Weit instaling dependences to finish, yhen start autoreloading development serve
 nodemon src/app.js
 ```
 
-For deploiment mode run [pm2](https://pm2.keymetrics.io/):
+For deployment mode run [pm2](https://pm2.keymetrics.io/):
 
 ```bash
 # Start your application with PM2
