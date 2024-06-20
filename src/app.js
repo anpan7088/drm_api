@@ -39,6 +39,7 @@ app.use("/auth", authRoutes);
 // Use user profile routes
 app.use("/user", userProfileRoutes);
 
+
 // port
 app.listen(PORT, () => {
     console.log("App is running on port " + PORT);
