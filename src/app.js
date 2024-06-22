@@ -16,7 +16,9 @@ const app = express();
 const corsOptions = {
     origin: [ // Allow only this origins
         'https://dorms.sman.cloud', 
-        'http://localhost:5173'], 
+        'http://localhost:5173',
+        'http://158.220.121.142:5173',
+    ], 
 
     methods:
         'GET,HEAD,PUT,PATCH,POST,DELETE',
