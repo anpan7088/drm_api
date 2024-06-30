@@ -170,7 +170,8 @@ const getDormReviews = async (req, res) => {
 
     const sql =`
         SELECT 
-            dr.id AS review_id, 
+            dr.id AS id,
+            dr.id AS review_id,
             dr.rating AS rating, 
             dr.comment AS comment, 
             usr.username AS username,
