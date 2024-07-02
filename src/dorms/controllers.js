@@ -128,6 +128,63 @@ const getTopDorms = async (req, res) => {
     }
 };
 
+const getDormImages = async (req, res) => {
+    const { dorm_id } = req.params;
+    try {
+        const [result] = await pool.promise().query('SELECT * FROM dorms_images WHERE dorm_id =?', [dorm_id]);
+        const ret = {
+            baseUrl: process.env.IMAGES_BASE_URL,
+            data: result
+        }
+        res.json(ret);
+    }
+    catch (err) {
+        // console.error(err);
+        res.status(500).json({ message: 'Error getting dorm images!' });
+    }
+};
+
+// Get top dorms with images
+// This is composed from two queries, may be it is bether to combine them into one
+// TODO: combine into one procedure and one query if it posible in MySql
+const getTopDormsWithImages = async (req, res) => {
+    const { count } = req.params;
+
+    const topDormsSql = `CALL GetTopReviewedDorms(${count});`;
+    const dormImagesSql = 'SELECT * FROM dorms_images WHERE dorm_id = ?';
+
+    try {
+        // Get top dorms
+        const [topDormsResult] = await pool.promise().query(topDormsSql);
+        const topDorms = topDormsResult[0];
+
+        // Get images for each dorm
+        const dormsWithImages = await Promise.all(topDorms.map(async (dorm) => {
+            const [imagesResult] = await pool.promise().query(dormImagesSql, [dorm.id]);
+
+            const images = imagesResult.map(image => ({
+                id: image.id,
+                imageUrl: `${process.env.IMAGES_BASE_URL}${image.url}`,  // Assuming image_path is the column name containing the image file name
+                title: image.title,
+            }));
+
+            return {
+                ...dorm,
+                images: images,
+            };
+        }));
+
+        res.json(dormsWithImages);
+    } catch (err) {
+        console.error("Error in SQL query:", err);
+        res.status(500).json({
+            error: 'Internal Server Error',
+            sqlError: err.sqlMessage
+        });
+    }
+};
+
+
 const getDormOfTheDay = async (req, res) => {
     const { count } = req.params;
 
@@ -146,22 +203,6 @@ const getDormOfTheDay = async (req, res) => {
             error: 'Internal Server Error',
             sqlError: err.sqlMessage
         });
-    }
-};
-
-const getDormImages = async (req, res) => {
-    const { dorm_id } = req.params;
-    try {
-        const [result] = await pool.promise().query('SELECT * FROM dorms_images WHERE dorm_id =?', [dorm_id]);
-        const ret = {
-            baseUrl: process.env.IMAGES_BASE_URL,
-            data: result
-        }
-        res.json(ret);
-    }
-    catch (err) {
-        // console.error(err);
-        res.status(500).json({ message: 'Error getting dorm images!' });
     }
 };
 
@@ -207,4 +248,5 @@ module.exports = {
     getDormOfTheDay,
     getDormImages,
     getDormReviews,
+    getTopDormsWithImages
 };

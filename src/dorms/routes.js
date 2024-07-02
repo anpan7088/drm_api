@@ -8,7 +8,8 @@ const {
     getTopDorms, 
     getDormOfTheDay, 
     getDormImages,
-    getDormReviews
+    getDormReviews,
+    getTopDormsWithImages
 } = require('./controllers');
 
 const { isUser, isAdmin } = require('../middleware/authMiddleware');
@@ -19,6 +20,7 @@ router.get('/:id', getDormById);
 router.get('/:dorm_id/images', getDormImages);
 router.get('/:dorm_id/reviews', getDormReviews);
 router.get('/top-dorms/:count',getTopDorms);
+router.get('/top-dorms-with-images/:count', getTopDormsWithImages);
 router.get('/dorm-of-the-day/:count', getDormOfTheDay);
 router.post('/', isUser, createDorm);
 router.patch('/:id', isUser, patchDormData);
