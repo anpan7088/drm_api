@@ -164,7 +164,7 @@ const getTopDormsWithImages = async (req, res) => {
 
             const images = imagesResult.map(image => ({
                 id: image.id,
-                imageUrl: `${process.env.IMAGES_BASE_URL}${image.url}`,  // Assuming image_path is the column name containing the image file name
+                url: `${process.env.IMAGES_BASE_URL}${image.url}`,  // Assuming image_path is the column name containing the image file name
                 title: image.title,
             }));
 
