@@ -21,7 +21,6 @@ const getDormReviewsList = async (req, res) => {
     }
 }
 
-
 const patchDormReview = async (req, res) => {
     const { id } = req.params;
     const fieldsToUpdate = req.body;

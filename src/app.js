@@ -36,10 +36,6 @@ app.get("/", (req, res) => {
     res.send({ "message": "Welcome to Rate Dorms API!" });
 });
 
-app.get("/", (req, res) => {
-    res.send({ "message": "Welcome to Rate Dorms API!" });
-});
-
 // Serve static files from the 'uploads' directory
 app.use('/public', express.static('public'));
 

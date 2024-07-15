@@ -83,7 +83,7 @@ router.patch('/profile', isUser, async (req, res) => {
 });
 
 router.get("/test", (req, res) => {
-    res.json({ message: "testProfileRoute" });
+    res.json({ message: "testProfileRoute!!!" });
 });
 
 module.exports = router;
