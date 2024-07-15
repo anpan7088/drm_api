@@ -86,5 +86,9 @@ router.get("/test", (req, res) => {
     res.json({ message: "testProfileRoute!!!" });
 });
 
+router.get("/test02", (req, res) => {
+    res.json({ message: "proba-za-usermanagment branch!!!" });
+});
+
 module.exports = router;
 
