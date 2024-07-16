@@ -214,6 +214,9 @@ const getDormReviews = async (req, res) => {
             dr.id AS id,
             dr.id AS review_id,
             dr.rating AS rating, 
+            dr.room_rating AS room_rating,
+            dr.bathroom_rating AS bathroom_rating,
+            dr.location_rating AS location_rating,
             dr.comment AS comment, 
             usr.username AS username,
             CONCAT(usr.firstName, ' ', usr.lastName) AS fullName
