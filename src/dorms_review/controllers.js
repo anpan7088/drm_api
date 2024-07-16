@@ -92,16 +92,16 @@ const getDormReviewById = async (req, res) => {
 };
 
 const createDormReview = async (req, res) => {
-    const { dorm_id, comment, rating } = req.body;
+    const { dorm_id, comment, rating, room_rating, bathroom_rating, location_rating } = req.body;
     const user_id = req.user.id;
 
-    const sql = `INSERT INTO dorms_review (user_id, dorm_id, comment, rating) VALUES (?, ?, ?, ?)`;
+    const sql = "INSERT INTO dorms_review (user_id, dorm_id, comment, rating, room_rating, bathroom_rating, location_rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     // Escape user-provided comment to prevent SQL injection
     const escapedComment = safeEscape(comment); // Assuming you're using mysql2
 
     try {
-        const [result] = await pool.promise().query(sql, [user_id, dorm_id, escapedComment, rating]);
+        const [result] = await pool.promise().query(sql, [user_id, dorm_id, escapedComment, rating, room_rating, bathroom_rating, location_rating]);
         // console.log(result);
         res.json({ 
             message: 'Dorm review created successfully!',
