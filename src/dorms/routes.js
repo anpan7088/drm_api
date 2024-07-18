@@ -9,13 +9,15 @@ const {
     getDormOfTheDay, 
     getDormImages,
     getDormReviews,
-    getTopDormsWithImages
+    getTopDormsWithImages,
+    getDormLocations
 } = require('./controllers');
 
 const { isUser, isAdmin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.get('/',  getDormList);
+router.get('/locations/', getDormLocations);
 router.get('/:id', getDormById);
 router.get('/:dorm_id/images', getDormImages);
 router.get('/:dorm_id/reviews', getDormReviews);

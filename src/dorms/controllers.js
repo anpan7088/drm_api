@@ -22,6 +22,25 @@ const getDormList = async (req, res) => {
     }
 };
 
+
+const getDormLocations = async (req, res) => {
+    const sql = `SELECT id, name, lat, lng, address, city FROM dorms`; 
+    try {
+        const [result] = await pool.promise().query(sql);
+        if (result.length > 0) {
+            res.json(result);
+        } else {
+            res.status(404).json({ error: `Dorm location not found: ${id}` });
+        }
+    } catch (err) {
+        console.error("Error in SQL query:", err);
+        res.status(500).json({
+            error: 'Internal Server Error',
+            sqlError: err.sqlMessage
+        });
+    }
+}
+
 //
 const getDormById = async (req, res) => {
     const { id } = req.params;
@@ -251,5 +270,6 @@ module.exports = {
     getDormOfTheDay,
     getDormImages,
     getDormReviews,
-    getTopDormsWithImages
+    getTopDormsWithImages,
+    getDormLocations
 };
