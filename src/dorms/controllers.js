@@ -28,9 +28,11 @@ const getDormLocations = async (req, res) => {
     try {
         const [result] = await pool.promise().query(sql);
         if (result.length > 0) {
-            res.json(result);
+            // Filter out items without lat or lng
+            const filteredResult = result.filter(dorm => dorm.lat !== null && dorm.lng !== null);
+            res.json(filteredResult);
         } else {
-            res.status(404).json({ error: `Dorm location not found: ${id}` });
+            res.status(404).json({ error: `Dorm location not found` });
         }
     } catch (err) {
         console.error("Error in SQL query:", err);
@@ -40,6 +42,7 @@ const getDormLocations = async (req, res) => {
         });
     }
 }
+
 
 //
 const getDormById = async (req, res) => {
