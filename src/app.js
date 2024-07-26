@@ -8,8 +8,6 @@ const userProfileRoutes = require('./userProfiles/routes'); // Import the user r
 
 const PORT = process.env.PORT || 8088;
 
-const app = express();
-
 // Define allowed origins based on environment
 // const allowedOrigins = ['https://DORMS.sman.cloud', 'http://localhost:5173', 'http://localhost:5173/', 'http://localhost/'];
 
@@ -27,8 +25,9 @@ const corsOptions = {
     optionsSuccessStatus: 204
 };
 
+// create express app inctance and set cors options
+const app = express();
 app.use(cors(corsOptions))
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -60,7 +59,7 @@ app.use("/reviews", require('./dorms_review/routes'));
 // Use cities routes
 app.use("/cities", require('./cities/routes'));
 
-// port
+// Start server on port 8088 or process.env.PORT from .env file
 app.listen(PORT, () => {
     console.log("App is running on port " + PORT);
 });
