@@ -44,16 +44,23 @@ const getDormLocations = async (req, res) => {
 }
 
 
-//
+// getDormById 
 const getDormById = async (req, res) => {
     const { id } = req.params;
 
     const sql = `SELECT * FROM dorms WHERE id = ?`;
-
+    const imagesSql = `SELECT id,url FROM dorms_images WHERE dorm_id = ?`;
+    
     try {
-        const [result] = await pool.promise().query(sql, [id]);
-        if (result.length > 0) {
-            res.json(result[0]);
+        const [dormResult] = await pool.promise().query(sql, [id]);
+        if (dormResult.length > 0) {
+            const [imagesResult] = await pool.promise().query(imagesSql, [id]);
+            const response = {
+                ...dormResult[0],
+                baseImageUrl: `${process.env.IMAGES_BASE_URL}`,  //Base image URL from .env  file. 
+                images: imagesResult,
+            };
+            res.json(response);
         } else {
             res.status(404).json({ error: `Dorm not found: ${id}` });
         }
@@ -66,7 +73,7 @@ const getDormById = async (req, res) => {
     }
 };
 
-// 
+
 const createDorm = async (req, res) => {
     const { name, address, city } = req.body;
 
