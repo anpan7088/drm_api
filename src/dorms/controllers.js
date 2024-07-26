@@ -2,16 +2,28 @@ const { pool } = require('../db/db');
 
 
 const getDormList = async (req, res) => {
-    const { id } = req.params;
-
-    const sql = `SELECT * FROM dorms where 1=1`;
+    const sql = `SELECT * FROM dorms WHERE 1=1`;
+    const imagesSql = 'SELECT * FROM dorms_images WHERE dorm_id = ?';
 
     try {
-        const [result] = await pool.promise().query(sql);
-        if (result.length > 0) {
-            res.json(result);
+        const [dorms] = await pool.promise().query(sql);
+        
+        if (dorms.length > 0) {
+            // Fetch images for each dorm
+            const dormsWithImages = await Promise.all(
+                dorms.map(async (dorm) => {
+                    const [images] = await pool.promise().query(imagesSql, [dorm.id]);
+                    return {
+                        ...dorm,
+                        images: images.map(
+                            image => (`${process.env.IMAGES_BASE_URL}${image.url}` ))
+                    };
+                })
+            );
+
+            res.json(dormsWithImages);
         } else {
-            res.status(404).json({ error: `Dorm not found: ${id}` });
+            res.status(404).json({ error: `No dorms found` });
         }
     } catch (err) {
         console.error("Error in SQL query:", err);
@@ -21,6 +33,27 @@ const getDormList = async (req, res) => {
         });
     }
 };
+
+
+// Version without images
+// const getDormList = async (req, res) => {
+//     const { id } = req.params;
+//     const sql = `SELECT * FROM dorms where 1=1`;
+//     try {
+//         const [result] = await pool.promise().query(sql);
+//         if (result.length > 0) {
+//             res.json(result);
+//         } else {
+//             res.status(404).json({ error: `Dorm not found: ${id}` });
+//         }
+//     } catch (err) {
+//         console.error("Error in SQL query:", err);
+//         res.status(500).json({
+//             error: 'Internal Server Error',
+//             sqlError: err.sqlMessage
+//         });
+//     }
+// };
 
 
 const getDormLocations = async (req, res) => {
@@ -193,7 +226,7 @@ const getTopDormsWithImages = async (req, res) => {
 
             const images = imagesResult.map(image => ({
                 id: image.id,
-                url: `${process.env.IMAGES_BASE_URL}${image.url}`,  // Assuming image_path is the column name containing the image file name
+                url: `${process.env.IMAGES_BASE_URL}${image.url}`, 
                 title: image.title,
             }));
 
