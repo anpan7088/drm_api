@@ -1,9 +1,28 @@
 const { pool, safeEscape } = require('../db/db');
 
+const mainQuery = `
+          SELECT 
+            dr.id AS id,
+            dr.dorm_id AS dorm_id,
+            dr.id AS review_id,
+            dr.rating AS rating, 
+            dr.room_rating AS room_rating,
+            dr.bathroom_rating AS bathroom_rating,
+            dr.location_rating AS location_rating,
+            dr.hot_water AS hot_water,
+            dr.comment AS comment, 
+            dr.user_id AS user_id,
+            usr.username AS username,
+            CONCAT(usr.firstName, ' ', usr.lastName) AS fullName,
+            dr.created_at AS created_at,
+            dr.updated_at AS updated_at
+        FROM dorms_review AS dr
+        INNER JOIN users AS usr ON usr.id = dr.user_id
+        `;
 
 const getDormReviewsList = async (req, res) => {
 
-    const sql = `SELECT * FROM dorms_review`;
+    const sql = mainQuery;
 
     try {
         const [result] = await pool.promise().query(sql);
@@ -73,7 +92,9 @@ const deleteDormReview = async (req, res) => {
 const getDormReviewById = async (req, res) => {
     const { id } = req.params;
 
-    const sql = `SELECT * FROM dorms_review WHERE id = ?`;
+    const sql = `
+        ${mainQuery}    
+        WHERE dr.id = ?`;
 
     try {
         const [result] = await pool.promise().query(sql, [id]);
