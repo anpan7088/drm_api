@@ -19,7 +19,7 @@ const getUserProfile = async (req, res) => {
         }
     } catch (err) {
         console.error("Error in SQL query:", err);
-        res.status(500).json({ 
+        res.status(500).json({
             error: 'Internal Server Error',
             sqlError: err.sqlMessage
         });
@@ -28,7 +28,15 @@ const getUserProfile = async (req, res) => {
 
 // list all users
 const listAllUsers = async (req, res) => {
-    const sql = `SELECT * FROM ${usersTable}`;
+
+    // select all users with review count
+    const sql = `
+        SELECT u.*,
+            COUNT(dorms_review.id) AS review_count
+        FROM ${usersTable} u
+        LEFT JOIN dorms_review ON u.id = dorms_review.user_id
+        GROUP BY u.id;
+    `;
 
     try {
         const [results] = await pool.promise().query(sql);
@@ -39,7 +47,7 @@ const listAllUsers = async (req, res) => {
         }
     } catch (err) {
         console.error("Error in SQL query:", err);
-        res.status(500).json({ 
+        res.status(500).json({
             error: 'Internal Server Error',
             sqlError: err.sqlMessage
         });
@@ -52,7 +60,7 @@ const patchUserProfile = async (req, res) => {
     // Get user_id from query parameters if present, otherwise use req.user.id
     const userId = req.params.user_id || req.user.id;
     const fieldsToUpdate = req.body;
-    
+
     // empty list to store the fields to update
     let updateFields = [];
     let updateValues = [];
@@ -82,8 +90,26 @@ const patchUserProfile = async (req, res) => {
         });
     } catch (err) {
         console.error("Error in SQL query:", err);
-        res.status(500).json({ 
-            error: 'Internal Server Error', 
+        res.status(500).json({
+            error: 'Internal Server Error',
+            sqlError: err.sqlMessage
+        });
+    }
+};
+
+const deleteUserProfile = async (req, res) => {
+    const userId = req.params.user_id;
+    const sql = `DELETE FROM ${usersTable} WHERE id = ?`;
+    try {
+        await pool.promise().query(sql, [userId]);
+        res.json({
+            status: true,
+            message: 'Profile deleted successfully'
+        });
+    } catch (err) {
+        console.error("Error in SQL query:", err);
+        res.status(500).json({
+            error: 'Internal Server Error',
             sqlError: err.sqlMessage
         });
     }
@@ -93,5 +119,6 @@ const patchUserProfile = async (req, res) => {
 module.exports = {
     getUserProfile,
     listAllUsers,
-    patchUserProfile
+    patchUserProfile,
+    deleteUserProfile
 };
