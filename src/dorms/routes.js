@@ -24,8 +24,8 @@ router.get('/:dorm_id/reviews', getDormReviews);
 router.get('/top-dorms/:count',getTopDorms);
 router.get('/top-dorms-with-images/:count', getTopDormsWithImages);
 router.get('/dorm-of-the-day/:count', getDormOfTheDay);
-router.post('/', isUser, createDorm);
-router.patch('/:id', isUser, patchDormData);
-router.delete('/:id', [ isUser ], deleteDorm);
+router.post('/', isAdmin, createDorm);
+router.patch('/:id', isAdmin, patchDormData);
+router.delete('/:id', [ isAdmin ], deleteDorm);
 
 module.exports = router; 

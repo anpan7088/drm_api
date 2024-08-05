@@ -5,8 +5,8 @@ const { isUser, isOwner, isAdmin, isAdminOrOwner } = require('../middleware/auth
 const router = express.Router();
 
 router.get("/", getDormReviewsList )
-router.patch('/:id', [ isAdminOrOwner ] ,patchDormReview);
-router.delete('/:id', [isUser, isOwner, isAdmin], deleteDormReview);
+router.patch('/:id',  isAdminOrOwner, patchDormReview);
+router.delete('/:id', isAdminOrOwner, deleteDormReview);
 router.get('/:id', getDormReviewById);
 router.post('/', isUser, createDormReview);
 
