@@ -4,7 +4,9 @@ const usersTable = process.env.USERS_TABLE || 'users';
 
 // get current user profile
 const getUserProfile = async (req, res) => {
-    const userId = req.user.id;
+
+    // Get user_id from query parameters if present, otherwise use req.user.id
+    const userId = req.params.user_id || req.user.id;
 
     const sql = `SELECT * FROM ${usersTable} WHERE id = ?`;
 
@@ -46,12 +48,16 @@ const listAllUsers = async (req, res) => {
 
 // PATCH CURRENT USER PROFILE
 const patchUserProfile = async (req, res) => {
-    const userId = req.user.id;
-    const fieldsToUpdate = req.body;
 
+    // Get user_id from query parameters if present, otherwise use req.user.id
+    const userId = req.params.user_id || req.user.id;
+    const fieldsToUpdate = req.body;
+    
+    // empty list to store the fields to update
     let updateFields = [];
     let updateValues = [];
 
+    // Loop through the fields to update and build the SQL query
     for (const field in fieldsToUpdate) {
         updateFields.push(`${field} = ?`);
         updateValues.push(fieldsToUpdate[field]);
@@ -63,8 +69,10 @@ const patchUserProfile = async (req, res) => {
 
     updateValues.push(userId);
 
+    // Construct the SQL query, from the list of fields to update
     const sql = `UPDATE ${usersTable} SET ${updateFields.join(", ")} WHERE id = ?`;
 
+    // Execute the SQL query
     try {
         await pool.promise().query(sql, updateValues);
         res.json({
