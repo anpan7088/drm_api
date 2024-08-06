@@ -21,16 +21,31 @@ const mainQuery = `
         `;
 
 const getDormReviewsList = async (req, res) => {
+    // Filter by dorm_id and user_id if provided
+    // query parameters: dorm_id, user_id are in format "/reviews/?dorm_id=1&user_id=1"
+    const dorm_id = req.query.dorm_id ? req.query.dorm_id : null;
+    const user_id = req.query.user_id ? req.query.user_id : null;
 
-    const sql = mainQuery;
+    let sql = mainQuery;
+
+    // Add filters to the SQL query from query parameters
+    if( dorm_id || user_id ) {
+        sql = sql + ` WHERE `;
+        if(dorm_id) {
+            sql += `dr.dorm_id = ? `;
+        }
+        if(dorm_id && user_id) {
+            sql += `AND `;
+        }
+        if(user_id) {
+            sql += `dr.user_id = ? `;
+        }
+    };
+
 
     try {
-        const [result] = await pool.promise().query(sql);
-        if (result.length > 0) {
-            res.json(result);
-        } else {
-            res.status(404).json({ error: `Dorm review list is empty!` });
-        }
+        const [result] = await pool.promise().query(sql, [dorm_id, user_id]);
+        res.json(result);
     } catch (err) {
         console.error("Error in SQL query:", err);
         res.status(500).json({
