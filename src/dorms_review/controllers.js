@@ -27,24 +27,26 @@ const getDormReviewsList = async (req, res) => {
     const user_id = req.query.user_id ? req.query.user_id : null;
 
     let sql = mainQuery;
+    let queryParams = [];
 
     // Add filters to the SQL query from query parameters
-    if( dorm_id || user_id ) {
-        sql = sql + ` WHERE `;
-        if(dorm_id) {
+    if (dorm_id || user_id) {
+        sql += ` WHERE `;
+        if (dorm_id) {
             sql += `dr.dorm_id = ? `;
+            queryParams.push(dorm_id);
         }
-        if(dorm_id && user_id) {
+        if (dorm_id && user_id) {
             sql += `AND `;
         }
-        if(user_id) {
+        if (user_id) {
             sql += `dr.user_id = ? `;
+            queryParams.push(user_id);
         }
-    };
-
+    }
 
     try {
-        const [result] = await pool.promise().query(sql, [dorm_id, user_id]);
+        const [result] = await pool.promise().query(sql, queryParams);
         res.json(result);
     } catch (err) {
         console.error("Error in SQL query:", err);
