@@ -35,7 +35,7 @@ sudo reboot
 
 For remote acces API are published on https://dorms.sman.cloud/api whith [nginx](https://nginx.org/)
 
-folowing script is generated with ChatGPT and ssl part is generated with Certbot
+this script is generated with ChatGPT and ssl part is generated with [Certbot](https://certbot.eff.org)
 
 ```nginx
 server {
